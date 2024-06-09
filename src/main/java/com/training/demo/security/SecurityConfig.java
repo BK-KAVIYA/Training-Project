@@ -43,7 +43,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/login").permitAll();
                     auth.requestMatchers("/register").permitAll();
                     auth.requestMatchers("/students").hasAuthority("USER");
-                    auth.requestMatchers("/admin").hasAuthority("ADMIN");
+                    auth.requestMatchers("/students/**").hasAuthority("ADMIN");
                 })
                 .httpBasic(withDefaults())
                 .authenticationManager(authenticationProvider())
