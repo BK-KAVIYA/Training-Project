@@ -37,13 +37,10 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
         }
 
-        // Save the login details
         loginService.save(login);
 
-        // Generate JWT token
         String token = generateToken(login.getUsername(), login.getPassword());
 
-        // Return the token as response
         return ResponseEntity.ok(token);
     }
 
@@ -54,16 +51,12 @@ public class LoginController {
                 new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword())
         );
 
-        // Set the authentication object in the SecurityContext
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Retrieve UserDetails from the authenticated user
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        // Generate JWT token
         String token = generateToken(login.getUsername(),login.getPassword());
 
-        // Return the token along with the user role as response
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
         response.put("role", userDetails.getAuthorities());
@@ -77,8 +70,7 @@ public class LoginController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );
-
-        // Generate JWT token
+        
         return jwtTokenProvider.createToken(authentication);
     }
 

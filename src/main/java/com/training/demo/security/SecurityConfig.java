@@ -40,7 +40,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> {
-                    auth.requestMatchers("/", "/login", "/register", "/students/{id}", "/students").permitAll();
+                    auth.requestMatchers("/", "/login", "/register", "/students/{id}", "/students","/api/blog-posts").permitAll();
                     auth.requestMatchers("/students/{id}").hasAuthority("USER");
                     auth.requestMatchers("/students").hasAuthority("ADMIN");
                 })
