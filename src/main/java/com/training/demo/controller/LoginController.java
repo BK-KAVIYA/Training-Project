@@ -11,7 +11,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -45,7 +49,6 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody Login login) {
-        System.out.println("call");
         // Authenticate the user
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword())
@@ -54,12 +57,20 @@ public class LoginController {
         // Set the authentication object in the SecurityContext
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Generate JWT token
-        String token = generateToken(login.getUsername(), login.getPassword());
+        // Retrieve UserDetails from the authenticated user
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        // Return the token as response
-        return ResponseEntity.ok(token);
+        // Generate JWT token
+        String token = generateToken(login.getUsername(),login.getPassword());
+
+        // Return the token along with the user role as response
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("role", userDetails.getAuthorities());
+
+        return ResponseEntity.ok(response);
     }
+
 
     private String generateToken(String username, String password) {
         // Authenticate the user
