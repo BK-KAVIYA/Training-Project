@@ -31,6 +31,12 @@ public class LoginService implements UserDetailsService {
         return loginRepository.findByUsername(username);
     }
 
+    // Method to check if a user with the given username already exists
+    public boolean existsByUsername(String username) {
+        Optional<Login> existingUser = loginRepository.findByUsername(username);
+        return existingUser.isPresent();
+    }
+
     public Login save(Login login) {
         login.setPassword(passwordEncoder().encode(login.getPassword()));
         return loginRepository.save(login);

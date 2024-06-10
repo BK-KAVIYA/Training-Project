@@ -1,10 +1,6 @@
 package com.training.demo.model;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
-
 
 @Entity
 @Table(name = "logins")
@@ -15,10 +11,10 @@ public class Login {
     private Long id;
 
     private String username;
-
     private String password;
-
     private String role;
+    private String email;
+    private String contactNumber;
 
     // Getters and Setters
     public Long getId() {
@@ -53,14 +49,21 @@ public class Login {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "Login{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
-                '}';
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 }
+
 
