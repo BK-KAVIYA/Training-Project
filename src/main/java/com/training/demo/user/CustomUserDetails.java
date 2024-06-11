@@ -1,6 +1,6 @@
 package com.training.demo.user;
 
-import com.training.demo.model.Login;
+import com.training.demo.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +12,9 @@ import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
 
-    private Login user;
+    private User user;
 
-    public CustomUserDetails(Login user) {
+    public CustomUserDetails(User user) {
         super();
         this.user = user;
     }

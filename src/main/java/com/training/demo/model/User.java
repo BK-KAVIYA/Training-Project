@@ -3,8 +3,8 @@ package com.training.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "logins")
-public class Login {
+@Table(name = "user")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,6 @@ public class Login {
     private String email;
     private String contactNumber;
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

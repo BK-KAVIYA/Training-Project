@@ -1,9 +1,9 @@
 package com.training.demo.controller;
 
 
-import com.training.demo.model.Login;
+import com.training.demo.model.User;
 import com.training.demo.security.JwtTokenProvider;
-import com.training.demo.service.LoginService;
+import com.training.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpHeaders;
 
 @RestController
 @RequestMapping("/auth")
-public class LoginController {
+public class UserController {
 
     @Autowired
-    private LoginService loginService;
+    private UserService userService;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -31,37 +32,40 @@ public class LoginController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody Login login) {
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
         // Check if the username already exists
-        if (loginService.existsByUsername(login.getUsername())) {
+        if (userService.existsByUsername(user.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
         }
 
-        loginService.save(login);
+        // Save the new user
+        userService.save(user);
 
-        String token = generateToken(login.getUsername(), login.getPassword());
-
-        return ResponseEntity.ok(token);
+        // Return a success message
+        return ResponseEntity.ok("User registered successfully");
     }
 
+
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody Login login) {
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
         // Authenticate the user
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword())
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        String token = generateToken(login.getUsername(),login.getPassword());
+        String token = generateToken(user.getUsername(), user.getPassword());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization","Bearer " + token); // Adding token to the response header
 
         Map<String, Object> response = new HashMap<>();
-        response.put("token", token);
         response.put("role", userDetails.getAuthorities());
 
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
 
@@ -70,13 +74,13 @@ public class LoginController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );
-        
+
         return jwtTokenProvider.createToken(authentication);
     }
 
     @GetMapping("/{username}")
-    public Login getLogin(@PathVariable String username) {
-        return loginService.findByUsername(username).orElse(null);
+    public User getLogin(@PathVariable String username) {
+        return userService.findByUsername(username).orElse(null);
     }
 }
 

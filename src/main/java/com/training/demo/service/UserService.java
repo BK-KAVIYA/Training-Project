@@ -1,8 +1,8 @@
 package com.training.demo.service;
 
 
-import com.training.demo.model.Login;
-import com.training.demo.repository.LoginRepository;
+import com.training.demo.model.User;
+import com.training.demo.repository.UserRepository;
 import com.training.demo.user.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class LoginService implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     @Autowired
-    private LoginRepository loginRepository;
+    private UserRepository userRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder()
@@ -27,25 +27,25 @@ public class LoginService implements UserDetailsService {
         return new BCryptPasswordEncoder();
     }
 
-    public Optional<Login> findByUsername(String username) {
-        return loginRepository.findByUsername(username);
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     // Method to check if a user with the given username already exists
     public boolean existsByUsername(String username) {
-        Optional<Login> existingUser = loginRepository.findByUsername(username);
+        Optional<User> existingUser = userRepository.findByUsername(username);
         return existingUser.isPresent();
     }
 
-    public Login save(Login login) {
-        login.setPassword(passwordEncoder().encode(login.getPassword()));
-        return loginRepository.save(login);
+    public User save(User user) {
+        user.setPassword(passwordEncoder().encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Login login = findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return new CustomUserDetails(login);
+        User user = findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return new CustomUserDetails(user);
     }
 }
 

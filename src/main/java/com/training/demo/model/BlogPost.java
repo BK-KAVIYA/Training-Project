@@ -2,9 +2,6 @@ package com.training.demo.model;
 
 import jakarta.persistence.*;
 
-
-import java.util.Date;
-
 @Entity
 @Table(name = "blogpost")
 public class BlogPost {
@@ -19,7 +16,7 @@ public class BlogPost {
 
     private String content;
 
-    private String publishedDate;
+    private String publisheddate;
 
     private String category;
 
@@ -55,12 +52,12 @@ public class BlogPost {
         this.content = content;
     }
 
-    public String getPublishedDate() {
-        return publishedDate;
+    public String getPublisheddate() {
+        return publisheddate;
     }
 
-    public void setPublishedDate(String  publishedDate) {
-        this.publishedDate = publishedDate;
+    public void setPublisheddate(String publisheddate) {
+        this.publisheddate = publisheddate;
     }
 
     public String getCategory() {

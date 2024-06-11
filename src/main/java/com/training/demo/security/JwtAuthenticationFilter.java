@@ -1,7 +1,7 @@
 package com.training.demo.security;
 
 
-import com.training.demo.service.LoginService;
+import com.training.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter implements Filter {
     private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    private LoginService userDetailsService;
+    private UserService userDetailsService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

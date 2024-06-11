@@ -1,7 +1,7 @@
 package com.training.demo.security;
 
 
-import com.training.demo.service.LoginService;
+import com.training.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     @Autowired
-    private LoginService userDetailsService;
+    private UserService userDetailsService;
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -40,9 +40,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> {
-                    auth.requestMatchers("/", "/login", "/register", "/students/{id}", "/students","/api/blog-posts").permitAll();
+                    auth.requestMatchers("/", "/login", "/register", "/auth/{username}").permitAll();
                     auth.requestMatchers("/students/{id}").hasAuthority("USER");
                     auth.requestMatchers("/students").hasAuthority("ADMIN");
+                    auth.requestMatchers("/api/blog-posts").authenticated();
+
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(withDefaults())
