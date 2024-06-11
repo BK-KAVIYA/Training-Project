@@ -2,6 +2,7 @@ package com.training.demo.controller;
 
 
 import com.training.demo.model.User;
+import com.training.demo.model.UserDTO;
 import com.training.demo.security.JwtTokenProvider;
 import com.training.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,22 @@ public class UserController {
     @GetMapping("/{username}")
     public User getLogin(@PathVariable String username) {
         return userService.findByUsername(username).orElse(null);
+    }
+
+    @GetMapping("get-by/{id}")
+    public UserDTO getUserById(@PathVariable Long id) {
+       // return userService.getUserById(id);
+
+        User user = userService.getUserById(id);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setContactNumber(user.getContactNumber());
+        userDTO.setRole(user.getRole());
+
+
+        return userDTO;
     }
 }
 

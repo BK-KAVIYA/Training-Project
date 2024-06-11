@@ -31,6 +31,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     // Method to check if a user with the given username already exists
     public boolean existsByUsername(String username) {
         Optional<User> existingUser = userRepository.findByUsername(username);
