@@ -1,8 +1,11 @@
 package com.training.demo.controller;
 
+import com.training.demo.model.BlogPost;
 import com.training.demo.model.Comment;
 import com.training.demo.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +28,17 @@ public class CommentController {
     @GetMapping("/{id}")
     public Comment getCommentById(@PathVariable int id) {
         return commentService.getCommentById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Comment updateComment(@PathVariable int id, @RequestBody Comment updatedComment) {
+        return commentService.updateComment(id, updatedComment);
+    }
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<List<Comment>> getCommentsForPost(@PathVariable Long postId, @RequestHeader("Authorization") String token) {
+        List<Comment> comments = commentService.getCommentsForPost(postId, token);
+        return ResponseEntity.ok(comments);
     }
 
     @PostMapping
