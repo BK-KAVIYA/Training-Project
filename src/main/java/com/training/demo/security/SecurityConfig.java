@@ -5,6 +5,7 @@ import com.training.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -43,7 +44,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/", "/login", "/register", "/auth/{username}", "/auth/{id}").permitAll();
                     auth.requestMatchers("/students/{id}").hasAuthority("USER");
                     auth.requestMatchers("/students").hasAuthority("ADMIN");
-                    auth.requestMatchers("/api/blog-posts").authenticated();
+                    auth.requestMatchers("/api/blog-posts/{id}").permitAll();
 
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
