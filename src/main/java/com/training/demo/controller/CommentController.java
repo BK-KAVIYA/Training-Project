@@ -31,8 +31,13 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public Comment updateComment(@PathVariable int id, @RequestBody Comment updatedComment) {
-        return commentService.updateComment(id, updatedComment);
+    public ResponseEntity<Comment> updateComment(@PathVariable int id, @RequestBody Comment updatedComment) {
+        System.out.println("call");
+        if (updatedComment == null || updatedComment.getContent() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Comment updated = commentService.updateComment(id, updatedComment);
+        return ResponseEntity.ok(updated);
     }
 
     @GetMapping("/post/{postId}")

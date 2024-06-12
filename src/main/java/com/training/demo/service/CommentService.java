@@ -1,16 +1,29 @@
 package com.training.demo.service;
 
+import com.training.demo.model.BlogPost;
 import com.training.demo.model.Comment;
+import com.training.demo.model.User;
+import com.training.demo.repository.BlogPostRepository;
 import com.training.demo.repository.CommentRepository;
+import com.training.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentService {
-    private final CommentRepository commentRepository;
+
+    @Autowired
+    private  CommentRepository commentRepository;
+
+    @Autowired
+    private BlogPostRepository blogPostRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     public CommentService(CommentRepository commentRepository) {
@@ -34,19 +47,24 @@ public class CommentService {
     }
 
     public Comment updateComment(int id, Comment updatedComment) {
-        Comment existingComment = commentRepository.findById(id).orElse(null);
-        if (existingComment != null) {
-            // Update the existing comment properties
+        System.out.println("comment -- "+updatedComment.getPost().getId());
+        Optional<Comment> existingCommentOpt = commentRepository.findById(id);
+        if (existingCommentOpt.isPresent()) {
+            Comment existingComment = existingCommentOpt.get();
             existingComment.setContent(updatedComment.getContent());
-            existingComment.setPost(updatedComment.getPost());
-            existingComment.setUser(updatedComment.getUser());
-            existingComment.setCreatedAt(updatedComment.getCreatedAt());
-            // Save the updated comment
+
+            // Ensure the post and user are correctly set
+            BlogPost post = blogPostRepository.findById(updatedComment.getPost().getId()).orElseThrow(() -> new RuntimeException("Post not found"));
+            User user = userRepository.findById(updatedComment.getUser().getId()).orElseThrow(() -> new RuntimeException("User not found"));
+            existingComment.setPost(post);
+            existingComment.setUser(user);
+
             return commentRepository.save(existingComment);
         } else {
-            return null; // Or throw an exception, handle as needed
+            throw new RuntimeException("Comment not found");
         }
     }
+
 
     public void deleteComment(int id) {
         commentRepository.deleteById(id);
