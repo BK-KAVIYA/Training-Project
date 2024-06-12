@@ -64,5 +64,3 @@ public class User {
         this.contactNumber = contactNumber;
     }
 }
-
-
