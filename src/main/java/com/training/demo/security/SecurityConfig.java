@@ -41,11 +41,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> {
-                    auth.requestMatchers("/", "/login", "/register", "/auth/{username}", "/auth/{id}","/comments").permitAll();
-                    auth.requestMatchers("/students/{id}").hasAuthority("USER");
-                    auth.requestMatchers("/students").hasAuthority("ADMIN");
-                    auth.requestMatchers("/api/blog-posts/{id}").permitAll();
-
+                    auth.requestMatchers("/", "/login", "/register", "/auth/{username}", "/auth/{id}").permitAll();
+                    auth.requestMatchers(HttpMethod.DELETE,"/api/blog-posts/{id}").authenticated();
+                    auth.requestMatchers(HttpMethod.POST,"/api/blog-posts").authenticated();
+                    auth.requestMatchers(HttpMethod.GET,"/api/blog-posts").permitAll();
+                    auth.requestMatchers(HttpMethod.PUT,"/api/blog-posts/{id}").authenticated();
+                    auth.requestMatchers(HttpMethod.DELETE,"/comments/{id}").authenticated();
+                    auth.requestMatchers(HttpMethod.POST,"/comments").authenticated();
+                    auth.requestMatchers(HttpMethod.GET,"/comments").permitAll();
+                    auth.requestMatchers(HttpMethod.PUT,"/comments/{id}").authenticated();
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(withDefaults())
