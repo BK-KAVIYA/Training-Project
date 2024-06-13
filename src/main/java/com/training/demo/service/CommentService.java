@@ -47,7 +47,7 @@ public class CommentService {
     }
 
     public Comment updateComment(int id, Comment updatedComment) {
-        System.out.println("comment -- "+updatedComment.getPost().getId());
+
         Optional<Comment> existingCommentOpt = commentRepository.findById(id);
         if (existingCommentOpt.isPresent()) {
             Comment existingComment = existingCommentOpt.get();

@@ -62,5 +62,16 @@ public class Comment {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", post=" + post +
+                ", user=" + user +
+                ", createdAt='" + createdAt + '\'' +
+                '}';
+    }
 }
 
