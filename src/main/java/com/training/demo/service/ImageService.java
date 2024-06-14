@@ -15,7 +15,6 @@ public class ImageService {
     private static final String UPLOAD_DIR = "E:/Training Project/front-end/sample-app/public/uploads/";
 
     public String uploadImageToFileSystem(MultipartFile file) throws IOException {
-        // Create the upload directory if it doesn't exist
         File directory = new File(UPLOAD_DIR);
         if (!directory.exists()) {
             directory.mkdirs();
@@ -25,7 +24,6 @@ public class ImageService {
         String filePath = UPLOAD_DIR + file.getOriginalFilename();
         Path path = Paths.get(filePath);
 
-        // Save the file to the file system
         Files.write(path, file.getBytes());
 
         return "File uploaded successfully: " + filePath;
@@ -35,5 +33,13 @@ public class ImageService {
         String filePath = UPLOAD_DIR + fileName;
         Path path = Paths.get(filePath);
         return Files.readAllBytes(path);
+    }
+
+    public String updateImageToFileSystem(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        String filePath = UPLOAD_DIR + fileName;
+        Path path = Paths.get(filePath);
+        Files.write(path, file.getBytes());
+        return fileName;
     }
 }

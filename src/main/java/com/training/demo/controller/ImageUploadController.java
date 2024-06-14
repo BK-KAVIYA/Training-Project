@@ -30,7 +30,7 @@ public class ImageUploadController {
 
         // Save image data to database
         ImageData imageData = new ImageData();
-        imageData.setName(file.getOriginalFilename());
+        imageData.setName("/uploads/" +file.getOriginalFilename());
         imageData.setType(file.getContentType());
         imageData.setPost_id(postId);
 
@@ -51,5 +51,27 @@ public class ImageUploadController {
     public ResponseEntity<List<ImageData>> getImagesByPostId(@PathVariable int post_id) {
         List<ImageData> images = imageDataRepository.findByPostId(post_id);
         return ResponseEntity.ok(images);
+    }
+
+    @PutMapping("/fileSystem")
+    public ResponseEntity<?> updateImageToFileSystem(@RequestParam("image") MultipartFile file,
+                                                     @RequestParam("postId") int postId) throws IOException {
+        // Find existing image data by post ID
+        List<ImageData> existingImages = imageDataRepository.findByPostId(postId);
+        if (existingImages.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Image data not found for post ID: " + postId);
+        }
+
+        ImageData imageData = existingImages.get(0);
+
+        imageData.setName("/uploads/" +file.getOriginalFilename());
+        imageData.setType(file.getContentType());
+
+        imageDataRepository.save(imageData);
+
+        String fileName = imageService.updateImageToFileSystem(file);
+
+        return ResponseEntity.status(HttpStatus.OK).body("File updated successfully: " + fileName);
     }
 }
