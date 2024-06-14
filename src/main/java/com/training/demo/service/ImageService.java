@@ -42,4 +42,9 @@ public class ImageService {
         Files.write(path, file.getBytes());
         return fileName;
     }
+
+    public void deleteImageFromFileSystem(String fileName) throws IOException {
+        Path path = Paths.get(UPLOAD_DIR + fileName);
+        Files.deleteIfExists(path);
+    }
 }

@@ -74,4 +74,20 @@ public class ImageUploadController {
 
         return ResponseEntity.status(HttpStatus.OK).body("File updated successfully: " + fileName);
     }
+
+    @DeleteMapping("/bypost/{postId}")
+    public ResponseEntity<?> deleteImagesByPostId(@PathVariable int postId) {
+        try {
+            // Delete all images associated with the given post ID
+            List<ImageData> images = imageDataRepository.findByPostId(postId);
+            for (ImageData image : images) {
+                imageService.deleteImageFromFileSystem(image.getName());
+                imageDataRepository.delete(image);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body("Images deleted successfully for post ID: " + postId);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to delete images for post ID: " + postId + ", " + e.getMessage());
+        }
+    }
 }
