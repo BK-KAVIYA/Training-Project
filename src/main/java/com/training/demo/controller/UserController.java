@@ -39,10 +39,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
         }
 
-        // Save the new user
         userService.save(user);
 
-        // Return a success message
         return ResponseEntity.ok("User registered successfully");
     }
 
@@ -86,7 +84,6 @@ public class UserController {
 
     @GetMapping("get-by/{id}")
     public UserDTO getUserById(@PathVariable Long id) {
-       // return userService.getUserById(id);
 
         User user = userService.getUserById(id);
         UserDTO userDTO = new UserDTO();

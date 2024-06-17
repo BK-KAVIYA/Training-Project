@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/images")
-public class ImageUploadController {
+public class ImageController {
 
     @Autowired
     private ImageService imageService;

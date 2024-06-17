@@ -4,13 +4,10 @@ import com.training.demo.model.BlogPost;
 import com.training.demo.model.Comment;
 import com.training.demo.model.CommentDTO;
 import com.training.demo.model.User;
-import com.training.demo.repository.BlogPostRepository;
-import com.training.demo.repository.UserRepository;
 import com.training.demo.service.BlogPostService;
 import com.training.demo.service.CommentService;
 import com.training.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +44,6 @@ public class CommentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Comment> updateComment(@PathVariable int id, @RequestBody Comment updatedComment) {
-        System.out.println("call");
         if (updatedComment == null || updatedComment.getContent() == null) {
             return ResponseEntity.badRequest().build();
         }
