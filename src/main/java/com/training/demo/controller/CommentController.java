@@ -39,7 +39,7 @@ public class CommentController {
 
     @GetMapping("/{id}")
     public Comment getCommentById(@PathVariable int id) {
-        return commentService.getCommentById(id);
+        return commentService.getCommentById(id); 
     }
 
     @PutMapping("/{id}")
